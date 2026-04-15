@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
+    initTheme();
     initCursor();
     initNavbar();
     initParticles();
@@ -9,6 +10,36 @@ document.addEventListener('DOMContentLoaded', () => {
     initModal();
     initToast();
 });
+
+function initTheme() {
+    const themeToggle = document.getElementById('themeToggle');
+    const savedTheme = localStorage.getItem('theme');
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    
+    if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        updateThemeIcon(true);
+    }
+    
+    themeToggle.addEventListener('click', () => {
+        const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+        
+        if (isDark) {
+            document.documentElement.removeAttribute('data-theme');
+            localStorage.setItem('theme', 'light');
+            updateThemeIcon(false);
+        } else {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            localStorage.setItem('theme', 'dark');
+            updateThemeIcon(true);
+        }
+    });
+    
+    function updateThemeIcon(isDark) {
+        const icon = themeToggle.querySelector('i');
+        icon.className = isDark ? 'fas fa-sun' : 'fas fa-moon';
+    }
+}
 
 function initCursor() {
     const cursor = document.querySelector('.cursor');
